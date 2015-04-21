@@ -1,3 +1,20 @@
+/**
+ * 
+ * @author Sam Damen (42636678)
+ * Bank
+ * COMS3200
+ * Assignment 1
+ * 
+ *  Register Message format = "regi,name,ip,port\n"
+ *  
+ *  
+ * Even item id             = "1"
+ * Odd item id              = "0"
+ * 
+ * Also print to stdout "item_id" + "OK" or "NOT OK"
+ * 
+ */
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
