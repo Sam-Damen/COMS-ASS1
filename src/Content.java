@@ -151,8 +151,7 @@ public class Content {
 		} else {
 			System.err.print("Content rEgistration with NameServer failed\n");
 			System.exit(1);
-		}
-		
+		}		
 	}
 	
 	
