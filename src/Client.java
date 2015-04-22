@@ -55,19 +55,26 @@ public class Client {
 		}
 		
 		//Send Requests to Store
-		out.println(commands[0]);
+		if (commands[0] > 0) {
+			out.println(commands[0] + "3200456712304478"); //include credit card info
+		} else {
+			out.println(commands[0]);
+		}
 			
 		//wait for and print reply
 		String reply;		
 		while ( (reply = in.readLine()) != null) {
-			System.out.println(reply);			
+			System.out.println(reply);
+			
+			if ( clientSocket.isClosed() ) { 		
+				
+				//Need to surround above in this while loop?
+				//check isConnected or isClosed??
+				out.close();
+				in.close();
+				System.exit(0);
+			}			
 		}
-		
-		//Need to surround above in this while loop?
-		//check isConnected or isClosed??
-		out.close();
-		in.close();
-		System.exit(0);
 
 	}
 	
@@ -97,9 +104,12 @@ public class Client {
 		//Send lookup request
 		out.println("look,Store");
 		
-		//Wait for response, assume it is correct?
-		//TODO Check if contains "," for some error handling
+		//Wait for response
 		String[] message = in.readLine().split(",");
+		if (message[0].contains("Error")) {
+			System.out.print("Store has not registered\n");
+			System.exit(1);
+		}
 		out.close();
 		in.close();
 		clientSocket.close();
