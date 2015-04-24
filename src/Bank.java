@@ -115,14 +115,14 @@ public class Bank {
 								long num = Long.parseLong(id); //Need to account for 32bit limit
 								
 								if ( (num & 1) == 0 ) {
-									reply = "1";
+									reply = "1\n";
 									System.out.format("%d OK\n", num);
 								} else {
-									reply = "0";
+									reply = "0\n";
 									System.out.format("%d NOT OK\n", num);
 								}
 							} catch (NumberFormatException e) {
-								reply = "0";
+								reply = "0\n";
 								System.out.println("Wrong Format for id");
 							}
 							

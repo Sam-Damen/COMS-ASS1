@@ -80,7 +80,7 @@ public class Content {
 			System.exit(1);
 		}
 		
-		System.out.print("REGISTERED\n");
+		System.out.print("REGISTERED\n"); //TODO remove prints
 		
 		//Perform Server functions
 		Socket connSocket = null;

@@ -56,7 +56,7 @@ public class Client {
 		
 		//Send Requests to Store
 		if (commands[0] > 0) {
-			out.println(commands[0] + "3200456712304478"); //include credit card info
+			out.println(commands[0] + " 3200456712304478"); //include credit card info
 		} else {
 			out.println(commands[0]);
 		}

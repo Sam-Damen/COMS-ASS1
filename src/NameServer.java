@@ -129,7 +129,7 @@ public class NameServer {
 								case "look":
 									//Lookup Request
 									if ( lookQuery(message.trim()) ) {
-										String name = message.substring(5, message.length() - 1); //line.length includes \n
+										String name = message.substring(5, (message.trim().length()) ); //line.length includes \r\n in eclipse so -2
 										ArrayList<String> list = serverTable.get(name); 
 										//Return the requested name and information to client
 										reply = name + "," + list.get(0) + "," + list.get(1) + "\n";

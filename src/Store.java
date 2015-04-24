@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 /**
  * 
@@ -28,7 +28,7 @@ public class Store {
 	
 	public static void main(String[] args) throws IOException {
 		
-		HashMap<Long,Float> stock = new HashMap<Long,Float> ();	
+		TreeMap<Long,Float> stock = new TreeMap<Long,Float> ();		//Change to TreeMap if need to be sorted
 		ServerSocket serverSoc = null;
 		Socket clientSocket = null;
 		
@@ -80,7 +80,7 @@ public class Store {
 		try {
 			lookupServer(commands[1]);
 		} catch (IOException e) {
-			System.err.print("unable to connect with NameServer\n");
+			System.err.print("unable to connect with NameServer\n"); //TODO check output print
 			System.exit(1);
 		}
 		
@@ -97,8 +97,8 @@ public class Store {
 		
 		try {
 			contentSocket = new Socket(content[1], Integer.parseInt(content[2]) );
-			bankOut = new PrintWriter(contentSocket.getOutputStream(), true);
-			bankIn = new BufferedReader( new InputStreamReader(contentSocket.getInputStream()));
+			contentOut = new PrintWriter(contentSocket.getOutputStream(), true);
+			contentIn = new BufferedReader( new InputStreamReader(contentSocket.getInputStream()));
 		} catch (Exception e) {
 			System.err.print("Unable to connect with Content\n");
 			System.exit(1);
@@ -128,7 +128,7 @@ public class Store {
 			BufferedReader in = new BufferedReader( new InputStreamReader(clientSocket.getInputStream()));
 			
 			//Read the request
-			int request = Integer.parseInt(in.readLine());
+			int request = Integer.parseInt(in.readLine()); 		//Need to handle NumberFormatException
 			if (request == 0) {
 				int i = 0;
 				//Iterate over all entries in the stock map
@@ -139,13 +139,35 @@ public class Store {
 				clientSocket.close();
 			} else {
 				//Perform purchase process
+				//Send item_id to bank
+				Long id = (long) stock.keySet().toArray()[request - 1]; 
+				bankOut.println(Long.toString(id));
 				
-			}
-			
-			
+				//Wait for response				
+				if ( bankIn.readLine().contains("1") ) { //TODO Check for \n ect ?
+					System.out.println("here2");
+					//Send request to content
+					contentOut.println(Long.toString(id));
+					//Wait for reply
+					String temp2 = contentIn.readLine();
+					if ( temp2.contains("NACK") ) {
+						//Content failed
+						out.println(Long.toString(id) + " transaction aborted");
+						clientSocket.close();
+					} else {
+						//Success
+						out.println(temp2);
+						clientSocket.close();
+					}
+				} else {
+					//Bank failed
+					out.println(Long.toString(id) + " transaction aborted");
+					clientSocket.close();
+				}				
+			}			
 			//CloseEverything
-			contentSocket.close();
-			bankSocket.close();
+			//contentSocket.close();
+			//bankSocket.close();
 			//clientSocket.close();
 		}
 			
